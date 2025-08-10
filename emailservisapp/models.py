@@ -1,11 +1,15 @@
 from django.db import models
 from django.db.models import DateTimeField
+from users.models import User
 
 
 class Client(models.Model):
     email = models.EmailField(max_length=100, verbose_name='электронный адрес', unique=True)
     name = models.CharField(max_length=255, verbose_name='Ф.И.О.')
     comment = models.TextField(blank=True, null=True, verbose_name='Комментарий')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
+                              related_name='clients')
+
 
     class Meta:
         verbose_name = 'Клиент'
@@ -19,6 +23,8 @@ class Client(models.Model):
 class Message(models.Model):
     subject = models.CharField(max_length=100, verbose_name='тема письма')
     body = models.TextField(blank=True, null=True, verbose_name='тело письма')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
+                              related_name='messages')
 
     class Meta:
         verbose_name = 'Сообщение'
@@ -30,7 +36,7 @@ class Message(models.Model):
 
 
 class Mailing(models.Model):
-    status_mailing_choices = ['Создана', 'Запущена', 'Завершена']
+    status_mailing_choices = [('start','Создана'), ('run', 'Запущена'), ('end','Завершена')]
     first_time = DateTimeField(blank=True, null=True, verbose_name='Дата и время первой отправки')
     last_time = DateTimeField(blank=True, null=True, verbose_name='Дата и время окончания отправки')
     status_mailing = models.CharField(max_length=10, choices=status_mailing_choices, default='Создана',
@@ -38,6 +44,9 @@ class Mailing(models.Model):
     message = models.ForeignKey(Message, on_delete=models.SET_NULL, verbose_name='сообщение', null=True, blank=True,
                                 related_name='mailing')
     clients = models.ManyToManyField(Client, related_name='mailing', verbose_name='получатели')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
+                              related_name='mailings')
+
 
     class Meta:
         verbose_name = 'Рассылка'
@@ -50,7 +59,7 @@ class Mailing(models.Model):
 
 class Attempt(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время попытки')
-    status_attempt_choices = ['Успех', 'Провал']
+    status_attempt_choices = [('sucsess', 'Успех'), ('unsucsess', 'Провал')]
     status_attempt = models.CharField(max_length=10, choices=status_attempt_choices, verbose_name='статус попытки',
                                       null=True, blank=True)
     server_answer = models.TextField(blank=True, null=True, verbose_name='ответ сервера')
