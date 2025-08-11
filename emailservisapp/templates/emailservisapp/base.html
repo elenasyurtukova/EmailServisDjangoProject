@@ -89,7 +89,9 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto"><h1 class="fw-light">Сервис рассылки</h1>
-                <p><a class="btn btn-primary" href="{% url 'catalog:product_create' %}" role="button">Создать товар</a>
+                <p><a class="btn btn-primary" href="{% url 'emailservisapp:client_create' %}" role="button">Создать получателя рассылки</a>
+
+                <a class="btn btn-secondary" href="{% url 'emailservisapp:message_create' %}" role="button">Создать сообщение</a>
                 </p>
             </div>
         </div>
