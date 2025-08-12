@@ -1,5 +1,5 @@
-from .models import Client, Message
-from .forms import ClientForm, MessageForm
+from .models import Client, Message, Mailing, Attempt
+from .forms import ClientForm, MessageForm, MailingForm, AttemptForm
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -71,3 +71,51 @@ class MessageUpdateView(UpdateView):
 class MessageDeleteView(DeleteView):
     model = Message
     success_url = reverse_lazy('emailservisapp:messages_list')
+
+class MailingListView(ListView):
+    model = Mailing
+
+class MailingDetailView(DetailView):
+    model = Mailing
+
+class MailingCreateView(CreateView):
+    model = Mailing
+    form_class = MailingForm
+    success_url = reverse_lazy('emailservisapp:mailings_list')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+class MailingUpdateView(UpdateView):
+    model = Mailing
+    form_class = MailingForm
+    success_url = reverse_lazy('emailservisapp:mailings_list')
+
+class MailingDeleteView(DeleteView):
+    model = Mailing
+    success_url = reverse_lazy('emailservisapp:mailings_list')
+
+class AttemptListView(ListView):
+    model = Attempt
+
+class AttemptDetailView(DetailView):
+    model = Attempt
+
+class AttemptCreateView(CreateView):
+    model = Attempt
+    form_class = AttemptForm
+    success_url = reverse_lazy('emailservisapp:attempts_list')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+class AttemptUpdateView(UpdateView):
+    model = Attempt
+    form_class = AttemptForm
+    success_url = reverse_lazy('emailservisapp:attempts_list')
+
+class AttemptDeleteView(DeleteView):
+    model = Attempt
+    success_url = reverse_lazy('emailservisapp:attempts_list')

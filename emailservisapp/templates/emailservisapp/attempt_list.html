@@ -4,32 +4,33 @@
 <section class="py-5 text-center container">
     <div>
         <div class="col-lg-6 col-md-8 mx-auto">
-            <h2 class="fw-light">Сообщения</h2>
+            <h2 class="fw-light">Попытки рассылок</h2>
         </div>
-        <a class="btn btn-secondary" href="{% url 'emailservisapp:message_create' %}" role="button">Создать
-            сообщение</a>
+        <a class="btn btn-danger" href="{% url 'emailservisapp:attempt_create' %}" role="button">Создать
+            попытку рассылки</a>
     </div>
 </section>
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            {% for message in object_list %}
+            {% for attempt in object_list %}
             <div class="col">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <p class="card-text">сообщение номер: {{ message.id }}</p>
-                        <p class="card-text">тема: {{ message.subject }}</p>
+                        <p class="card-text">попытка номер: {{ attempt.id }}</p>
+                        <p class="card-text">рассылка: {{ attempt.mailing.id }}</p>
+
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a class="btn btn-primary"
-                                   href="{% url 'emailservisapp:message_detail' message.pk %}"
-                                   role="button">Перейти к сообщению</a>
+                                   href="{% url 'emailservisapp:attempt_detail' attempt.pk %}"
+                                   role="button">Перейти к попытке рассылки</a>
                                 <a class="btn btn-info"
-                                   href="{% url 'emailservisapp:message_update' message.pk %}"
+                                   href="{% url 'emailservisapp:attempt_update' attempt.pk %}"
                                    role="button">Редактировать</a>
 
                                 <a class="btn btn-danger"
-                                   href="{% url 'emailservisapp:message_delete' message.pk %}"
+                                   href="{% url 'emailservisapp:attempt_delete' attempt.pk %}"
                                    role="button">Удалить</a>
                             </div>
                         </div>

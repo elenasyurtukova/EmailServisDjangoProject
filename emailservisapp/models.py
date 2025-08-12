@@ -36,7 +36,7 @@ class Message(models.Model):
 
 
 class Mailing(models.Model):
-    status_mailing_choices = [('start','Создана'), ('run', 'Запущена'), ('end','Завершена')]
+    status_mailing_choices = [('Создана', 'start'), ('Запущена', 'run'), ('Завершена', 'end')]
     first_time = DateTimeField(blank=True, null=True, verbose_name='Дата и время первой отправки')
     last_time = DateTimeField(blank=True, null=True, verbose_name='Дата и время окончания отправки')
     status_mailing = models.CharField(max_length=10, choices=status_mailing_choices, default='Создана',
@@ -54,7 +54,7 @@ class Mailing(models.Model):
         ordering = ['status_mailing', 'message']
 
     def __str__(self):
-        return f'Рассылка {self.mailing_id}: статус {self.status_mailing}'
+        return f'Рассылка сообщения: {self.message}'
 
 
 class Attempt(models.Model):
