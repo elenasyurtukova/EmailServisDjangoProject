@@ -36,7 +36,7 @@ class Message(models.Model):
 
 
 class Mailing(models.Model):
-    status_mailing_choices = [('Создана', 'start'), ('Запущена', 'run'), ('Завершена', 'end')]
+    status_mailing_choices = [('start', 'Создана'), ('run', 'Запущена'), ('end', 'Завершена')]
     first_time = DateTimeField(blank=True, null=True, verbose_name='Дата и время первой отправки')
     last_time = DateTimeField(blank=True, null=True, verbose_name='Дата и время окончания отправки')
     status_mailing = models.CharField(max_length=10, choices=status_mailing_choices, default='Создана',
@@ -58,8 +58,10 @@ class Mailing(models.Model):
 
 
 class Attempt(models.Model):
+    success = 'Успех'
+    unsuccess = 'Провал'
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время попытки')
-    status_attempt_choices = [('sucsess', 'Успех'), ('unsucsess', 'Провал')]
+    status_attempt_choices = [(success, 'Успех'), (unsuccess, 'Провал')]
     status_attempt = models.CharField(max_length=10, choices=status_attempt_choices, verbose_name='статус попытки',
                                       null=True, blank=True)
     server_answer = models.TextField(blank=True, null=True, verbose_name='ответ сервера')

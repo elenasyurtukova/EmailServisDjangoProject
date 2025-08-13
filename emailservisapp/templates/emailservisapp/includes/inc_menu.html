@@ -5,7 +5,7 @@
                 </div>
             <div class="col-sm-4 offset-md-1 py-4"><h4>Навигация</h4>
                 <ul class="list-unstyled">
-                    <li><a href=# class="text-white">Главная</a></li>
+                    <li><a href="{% url 'emailservisapp:home' %}" class="text-white">Главная</a></li>
                     <li><a href="{% url 'emailservisapp:clients_list' %}" class="text-white">Получатели</a></li>
                     <li><a href="{% url 'emailservisapp:messages_list' %}" class="text-white">Сообщения</a></li>
                     <li><a href="{% url 'emailservisapp:mailings_list' %}" class="text-white">Рассылки</a></li>
