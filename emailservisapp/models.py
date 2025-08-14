@@ -36,7 +36,10 @@ class Message(models.Model):
 
 
 class Mailing(models.Model):
-    status_mailing_choices = [('start', 'Создана'), ('run', 'Запущена'), ('end', 'Завершена')]
+    start = 'Создана'
+    run = 'Запущена'
+    end = 'Завершена'
+    status_mailing_choices = [(start, 'Создана'), (run, 'Запущена'), (end, 'Завершена')]
     first_time = DateTimeField(blank=True, null=True, verbose_name='Дата и время первой отправки')
     last_time = DateTimeField(blank=True, null=True, verbose_name='Дата и время окончания отправки')
     status_mailing = models.CharField(max_length=10, choices=status_mailing_choices, default='Создана',

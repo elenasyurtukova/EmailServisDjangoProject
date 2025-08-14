@@ -23,7 +23,7 @@ def send_message(pk, request=None):
     message=mailing.message.body
     client_list = [client.email for client in mailing.clients.all()]
 
-    if mailing.status_mailing == 'end':
+    if mailing.status_mailing == Mailing.end:
         Attempt.objects.create(
             mailing=mailing,
             status_attempt=Attempt.unsuccess,
@@ -46,7 +46,7 @@ def send_message(pk, request=None):
             subject=subject,
             message=message,
             from_email=EMAIL_HOST_USER,
-            client_list=client_list,
+            recipient_list=client_list,
             fail_silently=False,
         )
 

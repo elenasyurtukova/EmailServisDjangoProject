@@ -138,9 +138,9 @@ class AttemptListView(ListView):
         return context
 
 class SendMailingView(View):
-    template_name = 'emailservisapp/send_mailing.html'
+    template_name = 'emailservisapp/mailing_detail.html'
 
-    def get(self, request, pk):
+    def post(self, request, pk):
         mailing = get_object_or_404(Mailing, pk=pk)
 
         success = send_message(mailing.pk, request)
