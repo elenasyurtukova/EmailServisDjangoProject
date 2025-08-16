@@ -9,6 +9,10 @@
         <a class="btn btn-danger" href="{% url 'emailservisapp:attempt_create' %}" role="button">Создать
             попытку рассылки</a>
     </div>
+    <p>Всего попыток: {{ total_attempts }}</p>
+    <p>Успешных попыток: {{ successful_attempts }}</p>
+    <p>Неуспешных попыток: {{ unsucessful_attempts }}</p>
+    <p>Количество отправленных сообщений: {{ sending_mails }}</p>
 </section>
 <div class="album py-5 bg-body-tertiary">
     <div class="container">

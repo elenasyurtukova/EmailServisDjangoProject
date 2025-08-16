@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 class ClientForm(ModelForm):
     class Meta:
         model = Client
-        fields = ['email', 'name', 'comment']
+        fields = ['email', 'name', 'comment', 'owner']
 
     def __init__(self, *args, **kwargs):
         super(ClientForm, self).__init__(*args, **kwargs)
@@ -17,12 +17,14 @@ class ClientForm(ModelForm):
                                                  'placeholder': 'Введите имя получателя'})
         self.fields['comment'].widget.attrs.update({'class': 'form-control',
                                                  'placeholder': 'Добавьте комментарий'})
-        # self.fields['owner'].widget.attrs.update({'class': 'form-control', })
+
+
+
 
 class MessageForm(ModelForm):
     class Meta:
         model = Message
-        fields = ['subject', 'body']
+        fields = ['subject', 'body', 'owner']
 
     def __init__(self, *args, **kwargs):
         super(MessageForm, self).__init__(*args, **kwargs)
@@ -31,10 +33,11 @@ class MessageForm(ModelForm):
         self.fields['body'].widget.attrs.update({'class': 'form-control',
                                                  'placeholder': 'Введите само сообщение'})
 
+
 class MailingForm(ModelForm):
     class Meta:
         model = Mailing
-        fields = ['status_mailing', 'message', 'clients']
+        fields = ['status_mailing', 'message', 'clients', 'owner']
 
     def __init__(self, *args, **kwargs):
         super(MailingForm, self).__init__(*args, **kwargs)
@@ -44,6 +47,12 @@ class MailingForm(ModelForm):
                                                  'placeholder': 'Выберете сообщение для рассылки'})
         self.fields['clients'].widget.attrs.update({'class': 'form-control',
                                                     'placeholder': 'Выберете получателей для рассылки'})
+
+class MailingManagerForm(ModelForm):
+    class Meta:
+        model = Mailing
+        fields = ['status_mailing', 'owner_is_active']
+
 
 class AttemptForm(ModelForm):
     class Meta:

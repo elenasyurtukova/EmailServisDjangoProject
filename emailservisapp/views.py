@@ -1,10 +1,12 @@
 from .models import Client, Message, Mailing, Attempt
-from .forms import ClientForm, MessageForm, MailingForm, AttemptForm
+from .forms import ClientForm, MessageForm, MailingForm, AttemptForm, MailingManagerForm
+from datetime import datetime
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.core.cache import cache
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 
@@ -79,7 +81,7 @@ class MessageListView(ListView):
 class MessageDetailView(DetailView):
     model = Message
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
     form_class = MessageForm
     success_url = reverse_lazy('emailservisapp:messages_list')
@@ -117,6 +119,14 @@ class MailingUpdateView(UpdateView):
     form_class = MailingForm
     success_url = reverse_lazy('emailservisapp:mailings_list')
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return MailingForm
+        elif user.groups.filter(name='Manager').exists():
+            return MailingManagerForm
+        raise PermissionDenied
+
 class MailingDeleteView(DeleteView):
     model = Mailing
     success_url = reverse_lazy('emailservisapp:mailings_list')
@@ -137,6 +147,18 @@ class AttemptListView(ListView):
         )
         return context
 
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            raise PermissionDenied("Вы не авторизованы")
+        cache_key = f'attempts_user_{self.request.user.pk}'
+        queryset = cache.get(cache_key)
+        if not queryset:
+            queryset = Attempt.objects.filter(mailing__owner=self.request.user).order_by('created_at')
+            cache.set(cache_key, queryset, 60 * 15)
+
+        return queryset
+
+
 class SendMailingView(View):
     template_name = 'emailservisapp/mailing_detail.html'
 
@@ -146,6 +168,7 @@ class SendMailingView(View):
         success = send_message(mailing.pk, request)
 
         if success:
+            mailing.last_time = datetime.now()
             print('Рассылка успешно отправлена')
         else:
             print('Рассылка не отправлена')

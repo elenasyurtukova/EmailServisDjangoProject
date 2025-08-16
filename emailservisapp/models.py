@@ -11,12 +11,10 @@ class Client(models.Model):
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
                               related_name='clients')
 
-
     class Meta:
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
         ordering = ['email', 'name']
-
 
     def __str__(self):
         return f'Клиент {self.name} электронный адрес: {self.email}'
@@ -51,12 +49,16 @@ class Mailing(models.Model):
     clients = models.ManyToManyField(Client, related_name='mailing', verbose_name='получатели')
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
                               related_name='mailings')
-
+    owner_is_active = models.BooleanField(blank=True, null=True, verbose_name='Флаг активности владельца', default=True)
 
     class Meta:
         verbose_name = 'Рассылка'
         verbose_name_plural = 'Рассылки'
         ordering = ['status_mailing', 'message']
+        permissions = [
+            ('can_end_mailing', 'Can end mailing'),
+            ('can_block_user', 'Can block user'),
+        ]
 
     def __str__(self):
         return f'Рассылка сообщения: {self.message}'
@@ -79,4 +81,7 @@ class Attempt(models.Model):
         ordering = ['created_at', 'status_attempt']
 
     def __str__(self):
-        return f'Попытка {self.attempt_id}'
+        return (f'Статус: {self.status_attempt}, '
+                f'Тема письма: {self.mailing.message.subject}, '
+                f'Дата попытки: {self.created_at}, '
+                f'Ответ сервера: {self.server_answer}')

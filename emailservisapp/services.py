@@ -10,14 +10,14 @@ def send_message(pk, request=None):
     mailing = Mailing.objects.get(pk=pk)
     now = timezone.now()
 
-    # if request and mailing.owner != request.user:
-    #     Attempt.objects.create(
-    #         mailing=mailing,
-    #         status_attempt=Attempt.unsuccess,
-    #         server_answer=f'Рассылку пытался отправить посторонний человек: {request.user.email}',
-    #         created_at=now,
-    #     )
-    #     return False
+    if request and mailing.owner != request.user:
+        Attempt.objects.create(
+            mailing=mailing,
+            status_attempt=Attempt.unsuccess,
+            server_answer=f'Рассылку пытался отправить посторонний человек: {request.user.email}',
+            created_at=now,
+        )
+        return False
 
     subject = mailing.message.subject
     message=mailing.message.body
@@ -58,6 +58,7 @@ def send_message(pk, request=None):
         )
         if mailing.status_mailing == Mailing.start:
             mailing.status_mailing = Mailing.run
+            mailing.last_time = timezone.now()
             mailing.save()
 
         return True
