@@ -1,4 +1,4 @@
-{% extends 'catalog/base.html' %}
+{% extends 'emailservisapp/base.html' %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -9,9 +9,12 @@
                         {% csrf_token %}
                         {{ form.as_p }}
                     </div>
-                    <button type="submit" class="btn btn-primary">
-                        Войти
-                    </button>
+                    <p>
+                        <button type="submit" class="btn btn-primary">
+                            Войти
+                        </button>
+                    </p>
+                    <p><a href="{% url 'users:password_reset' %}">Забыли пароль?</a></p>
                 </div>
             </form>
         </div>
