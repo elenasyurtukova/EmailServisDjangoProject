@@ -1,20 +1,22 @@
 from django.db import models
 from django.db.models import DateTimeField
 
+from users.models import User
 
 
 class Client(models.Model):
     email = models.EmailField(max_length=100, verbose_name='электронный адрес', unique=True)
     name = models.CharField(max_length=255, verbose_name='Ф.И.О.')
     comment = models.TextField(blank=True, null=True, verbose_name='Комментарий')
-    # owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
-    #                           related_name='clients')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
+                              related_name='clients')
 
 
     class Meta:
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
         ordering = ['email', 'name']
+
 
     def __str__(self):
         return f'Клиент {self.name} электронный адрес: {self.email}'
@@ -23,8 +25,8 @@ class Client(models.Model):
 class Message(models.Model):
     subject = models.CharField(max_length=100, verbose_name='тема письма')
     body = models.TextField(blank=True, null=True, verbose_name='тело письма')
-    # owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
-    #                           related_name='messages')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
+                              related_name='messages')
 
     class Meta:
         verbose_name = 'Сообщение'
@@ -47,8 +49,8 @@ class Mailing(models.Model):
     message = models.ForeignKey(Message, on_delete=models.SET_NULL, verbose_name='сообщение', null=True, blank=True,
                                 related_name='mailing')
     clients = models.ManyToManyField(Client, related_name='mailing', verbose_name='получатели')
-    # owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
-    #                           related_name='mailings')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='владелец', null=True, blank=True,
+                              related_name='mailings')
 
 
     class Meta:
