@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 class ClientForm(ModelForm):
     class Meta:
         model = Client
-        fields = ['email', 'name', 'comment', 'owner']
+        exclude = ('owner',)
 
     def __init__(self, *args, **kwargs):
         super(ClientForm, self).__init__(*args, **kwargs)
@@ -24,7 +24,7 @@ class ClientForm(ModelForm):
 class MessageForm(ModelForm):
     class Meta:
         model = Message
-        fields = ['subject', 'body', 'owner']
+        exclude = ('owner',)
 
     def __init__(self, *args, **kwargs):
         super(MessageForm, self).__init__(*args, **kwargs)
@@ -37,7 +37,7 @@ class MessageForm(ModelForm):
 class MailingForm(ModelForm):
     class Meta:
         model = Mailing
-        fields = ['status_mailing', 'message', 'clients', 'owner']
+        fields = ['status_mailing', 'message', 'clients']
 
     def __init__(self, *args, **kwargs):
         super(MailingForm, self).__init__(*args, **kwargs)

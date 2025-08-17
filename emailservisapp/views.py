@@ -1,3 +1,5 @@
+from django.views.decorators.cache import cache_page
+
 from .models import Client, Message, Mailing, Attempt
 from .forms import ClientForm, MessageForm, MailingForm, AttemptForm, MailingManagerForm
 from datetime import datetime
@@ -8,6 +10,7 @@ from django.urls import reverse_lazy
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.decorators import method_decorator
 from django.views import View
 
 from .services import send_message
@@ -35,6 +38,7 @@ def home(request):
 class ClientListView(ListView):
     model = Client
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ClientDetailView(DetailView):
     model = Client
 
@@ -44,7 +48,10 @@ class ClientCreateView(CreateView):
     success_url = reverse_lazy('emailservisapp:clients_list')
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user
+        client = form.save()
+        user = self.request.user
+        client.owner = user
+        client.save()
         return super().form_valid(form)
 
 class ClientUpdateView(UpdateView):
@@ -52,28 +59,11 @@ class ClientUpdateView(UpdateView):
     form_class = ClientForm
     success_url = reverse_lazy('emailservisapp:clients_list')
 
-    # def get_form_class(self):
-    #     user = self.request.user
-    #     if user == self.object.owner:
-    #         return ClientForm
-    #     if user.has_perm('emailservisapp.can_unpublish_product'):
-    #         return ProductModeratorForm
-    #     raise PermissionDenied
 
 class ClientDeleteView(DeleteView):
     model = Client
     success_url = reverse_lazy('emailservisapp:clients_list')
 
-    # def post(self, request, *args, **kwargs):
-    #     client_id = kwargs['pk']
-    #     client = get_object_or_404(Client, id=client_id)
-    #
-    #     if not request.user.has_perm('catalog.can_delete_product'):
-    #         return HttpResponseForbidden("У вас нет прав для удаления продукта.")
-    #
-    #     product.delete()
-    #
-    #     return redirect('catalog:products_list')
 
 class MessageListView(ListView):
     model = Message
@@ -87,7 +77,10 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('emailservisapp:messages_list')
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user
+        message = form.save()
+        user = self.request.user
+        message.owner = user
+        message.save()
         return super().form_valid(form)
 
 class MessageUpdateView(UpdateView):
@@ -111,7 +104,10 @@ class MailingCreateView(CreateView):
     success_url = reverse_lazy('emailservisapp:mailings_list')
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user
+        mailing = form.save()
+        user = self.request.user
+        mailing.owner = user
+        mailing.save()
         return super().form_valid(form)
 
 class MailingUpdateView(UpdateView):
@@ -169,6 +165,8 @@ class SendMailingView(View):
 
         if success:
             mailing.last_time = datetime.now()
+            mailing.status_mailing = 'Завершена'
+            mailing.save()
             print('Рассылка успешно отправлена')
         else:
             print('Рассылка не отправлена')
