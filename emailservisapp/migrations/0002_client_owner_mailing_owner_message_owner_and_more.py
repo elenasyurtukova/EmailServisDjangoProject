@@ -9,33 +9,69 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('emailservisapp', '0001_initial'),
+        ("emailservisapp", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='client',
-            name='owner',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='clients', to=settings.AUTH_USER_MODEL, verbose_name='владелец'),
+            model_name="client",
+            name="owner",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="clients",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="владелец",
+            ),
         ),
         migrations.AddField(
-            model_name='mailing',
-            name='owner',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='mailings', to=settings.AUTH_USER_MODEL, verbose_name='владелец'),
+            model_name="mailing",
+            name="owner",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="mailings",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="владелец",
+            ),
         ),
         migrations.AddField(
-            model_name='message',
-            name='owner',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='messages', to=settings.AUTH_USER_MODEL, verbose_name='владелец'),
+            model_name="message",
+            name="owner",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="messages",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="владелец",
+            ),
         ),
         migrations.AlterField(
-            model_name='attempt',
-            name='status_attempt',
-            field=models.CharField(blank=True, choices=[('Успех', 'Успех'), ('Провал', 'Провал')], max_length=10, null=True, verbose_name='статус попытки'),
+            model_name="attempt",
+            name="status_attempt",
+            field=models.CharField(
+                blank=True,
+                choices=[("Успех", "Успех"), ("Провал", "Провал")],
+                max_length=10,
+                null=True,
+                verbose_name="статус попытки",
+            ),
         ),
         migrations.AlterField(
-            model_name='mailing',
-            name='status_mailing',
-            field=models.CharField(choices=[('Создана', 'Создана'), ('Запущена', 'Запущена'), ('Завершена', 'Завершена')], default='Создана', max_length=10, verbose_name='статус рассылки'),
+            model_name="mailing",
+            name="status_mailing",
+            field=models.CharField(
+                choices=[
+                    ("Создана", "Создана"),
+                    ("Запущена", "Запущена"),
+                    ("Завершена", "Завершена"),
+                ],
+                default="Создана",
+                max_length=10,
+                verbose_name="статус рассылки",
+            ),
         ),
     ]

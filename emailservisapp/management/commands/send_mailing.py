@@ -5,14 +5,13 @@ from emailservisapp.services import send_message
 
 
 class Command(BaseCommand):
-    help = 'Send current mailings'
+    help = "Send current mailings"
 
     def handle(self, *args, **options):
         now = timezone.now()
         try:
             mailings = Mailing.objects.filter(
-                first_time__lte=now,
-                status_mailing__in=[Mailing.start, Mailing.run]
+                first_time__lte=now, status_mailing__in=[Mailing.start, Mailing.run]
             )
             for mailing in mailings:
                 send_message(mailing.pk)
@@ -20,6 +19,6 @@ class Command(BaseCommand):
                 if mailing.status_mailing == Mailing.start:
                     mailing.status_mailing = Mailing.run
                     mailing.save()
-            return 'Рассылки отправлены.'
+            return "Рассылки отправлены."
         except Exception as ex:
             return str(ex)

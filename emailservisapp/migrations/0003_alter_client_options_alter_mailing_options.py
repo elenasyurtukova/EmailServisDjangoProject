@@ -6,16 +6,26 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('emailservisapp', '0002_client_owner_mailing_owner_message_owner_and_more'),
+        ("emailservisapp", "0002_client_owner_mailing_owner_message_owner_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='client',
-            options={'ordering': ['email', 'name'], 'permissions': [('can_block_client', 'Can block client')], 'verbose_name': 'Клиент', 'verbose_name_plural': 'Клиенты'},
+            name="client",
+            options={
+                "ordering": ["email", "name"],
+                "permissions": [("can_block_client", "Can block client")],
+                "verbose_name": "Клиент",
+                "verbose_name_plural": "Клиенты",
+            },
         ),
         migrations.AlterModelOptions(
-            name='mailing',
-            options={'ordering': ['status_mailing', 'message'], 'permissions': [('can_end_mailing', 'Can end mailing')], 'verbose_name': 'Рассылка', 'verbose_name_plural': 'Рассылки'},
+            name="mailing",
+            options={
+                "ordering": ["status_mailing", "message"],
+                "permissions": [("can_end_mailing", "Can end mailing")],
+                "verbose_name": "Рассылка",
+                "verbose_name_plural": "Рассылки",
+            },
         ),
     ]

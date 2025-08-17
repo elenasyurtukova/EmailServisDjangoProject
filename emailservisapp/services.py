@@ -1,5 +1,4 @@
 from django.utils import timezone
-from django.utils.timezone import localtime
 from django.core.mail import send_mail
 from .models import Mailing, Attempt
 from config.settings import EMAIL_HOST_USER
@@ -14,20 +13,20 @@ def send_message(pk, request=None):
         Attempt.objects.create(
             mailing=mailing,
             status_attempt=Attempt.unsuccess,
-            server_answer=f'Рассылку пытался отправить посторонний человек: {request.user.email}',
+            server_answer=f"Рассылку пытался отправить посторонний человек: {request.user.email}",
             created_at=now,
         )
         return False
 
     subject = mailing.message.subject
-    message=mailing.message.body
+    message = mailing.message.body
     client_list = [client.email for client in mailing.clients.all()]
 
     if mailing.status_mailing == Mailing.end:
         Attempt.objects.create(
             mailing=mailing,
             status_attempt=Attempt.unsuccess,
-            server_answer='Рассылка уже завершена',
+            server_answer="Рассылка уже завершена",
             created_at=now,
         )
         return False
@@ -36,7 +35,7 @@ def send_message(pk, request=None):
         Attempt.objects.create(
             mailing=mailing,
             status_attempt=Attempt.unsuccess,
-            server_answer='Нет получателей рассылки',
+            server_answer="Нет получателей рассылки",
             created_at=now,
         )
         return False
@@ -53,7 +52,7 @@ def send_message(pk, request=None):
         Attempt.objects.create(
             mailing=mailing,
             status_attempt=Attempt.success,
-            server_answer='Рассылка отправлена',
+            server_answer="Рассылка отправлена",
             created_at=now,
         )
         if mailing.status_mailing == Mailing.start:

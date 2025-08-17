@@ -9,13 +9,20 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('emailservisapp', '0006_alter_mailing_owner'),
+        ("emailservisapp", "0006_alter_mailing_owner"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='mailing',
-            name='owner',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='mailings', to=settings.AUTH_USER_MODEL, verbose_name='владелец'),
+            model_name="mailing",
+            name="owner",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="mailings",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="владелец",
+            ),
         ),
     ]
