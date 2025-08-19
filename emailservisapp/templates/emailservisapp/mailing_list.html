@@ -1,0 +1,50 @@
+{% extends 'emailservisapp/base.html' %}
+{% load my-tags %}
+{% block content %}
+<section class="py-5 text-center container">
+    <div>
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h2 class="fw-light">Рассылки</h2>
+        </div>
+        <a class="btn btn-danger" href="{% url 'emailservisapp:mailing_create' %}" role="button">Создать
+            рассылку</a>
+    </div>
+</section>
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for mailing in object_list %}
+
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {% if user == mailing.owner or perms.emailservisapp.view_mailing %}
+                        <p class="card-text">рассылка номер: {{ mailing.id }}</p>
+                        <p class="card-text">сообщение для рассылки: {{ mailing.message }}</p>
+                        {% endif %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                {% if user == mailing.owner or perms.emailservisapp.view_mailing %}
+                                <a class="btn btn-primary"
+                                   href="{% url 'emailservisapp:mailing_detail' mailing.pk %}"
+                                   role="button">Перейти к рассылке</a>
+                                <a class="btn btn-info"
+                                   href="{% url 'emailservisapp:mailing_update' mailing.pk %}"
+                                   role="button">Редактировать</a>
+                                {% endif %}
+                                {% if user == mailing.owner %}
+                                <a class="btn btn-danger"
+                                   href="{% url 'emailservisapp:mailing_delete' mailing.pk %}"
+                                   role="button">Удалить</a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
