@@ -39,6 +39,11 @@ def home(request):
 class ClientListView(ListView):
     model = Client
 
+    def get_queryset(self):
+        if self.request.user.has_perm("users.can_view_all"):
+            return Client.objects.all()
+        return Client.objects.filter(owner=self.request.user)
+
 
 @method_decorator(cache_page(60 * 15), name="dispatch")
 class ClientDetailView(DetailView):
@@ -72,6 +77,9 @@ class ClientDeleteView(DeleteView):
 class MessageListView(ListView):
     model = Message
 
+    def get_queryset(self):
+        return Message.objects.filter(owner=self.request.user)
+
 
 class MessageDetailView(DetailView):
     model = Message
@@ -103,6 +111,11 @@ class MessageDeleteView(DeleteView):
 
 class MailingListView(ListView):
     model = Mailing
+
+    def get_queryset(self):
+        if self.request.user.has_perm("users.can_view_all"):
+            return Mailing.objects.all()
+        return Mailing.objects.filter(owner=self.request.user)
 
 
 class MailingDetailView(DetailView):
@@ -170,7 +183,7 @@ class AttemptListView(ListView):
             ).order_by("created_at")
             cache.set(cache_key, queryset, 60 * 15)
 
-        return queryset
+        return Attempt.objects.filter(mailing__owner=self.request.user)
 
 
 class SendMailingView(View):
