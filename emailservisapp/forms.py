@@ -1,4 +1,6 @@
 from django.forms import ModelForm
+
+from users.models import User
 from .models import Client, Message, Mailing, Attempt
 
 
@@ -38,16 +40,10 @@ class MessageForm(ModelForm):
 class MailingForm(ModelForm):
     class Meta:
         model = Mailing
-        fields = ["status_mailing", "message", "clients"]
+        fields = ["message", "clients"]
 
     def __init__(self, *args, **kwargs):
         super(MailingForm, self).__init__(*args, **kwargs)
-        self.fields["status_mailing"].widget.attrs.update(
-            {
-                "class": "form-control",
-                "placeholder": "Статус рассылки по умолчанию СОЗДАНА",
-            }
-        )
         self.fields["message"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Выберете сообщение для рассылки"}
         )
@@ -62,7 +58,7 @@ class MailingForm(ModelForm):
 class MailingManagerForm(ModelForm):
     class Meta:
         model = Mailing
-        fields = ["status_mailing", "owner_is_active"]
+        fields = ["status_mailing"]
 
 
 class AttemptForm(ModelForm):
@@ -77,3 +73,8 @@ class AttemptForm(ModelForm):
         self.fields["mailing"].widget.attrs.update(
             {"class": "form-control", "placeholder": "Выберете рассылку"}
         )
+
+class UserManagerForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ["is_active"]

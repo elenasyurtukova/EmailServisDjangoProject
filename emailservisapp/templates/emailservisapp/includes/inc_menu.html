@@ -4,10 +4,15 @@
             <div class="col-sm-8 col-md-7 py-4"><h4>Ваш сервис рассылки</h4>
                 {% if user.is_authenticated %}
                 <a href="{% url 'emailservisapp:clients_list' %}" class="text-white">Получатели</a>
-                <a href="{% url 'emailservisapp:messages_list' %}" class="text-white">Сообщения</a>
                 <a href="{% url 'emailservisapp:mailings_list' %}" class="text-white">Рассылки</a>
                 <a href="{% url 'emailservisapp:attempts_list' %}" class="text-white">Попытки
                     рассылок</a>
+
+
+                <a href="{% url 'emailservisapp:messages_list' %}" class="text-white">Сообщения</a>
+                {% endif %}
+                {% if perms.emailservisapp.can_block_user %}
+                <a href="{% url 'emailservisapp:users_list' %}" class="text-white">Пользователи</a>
                 {% endif %}
             </div>
             <div class="col-sm-4 offset-md-1 py-4"><h4>Навигация</h4>

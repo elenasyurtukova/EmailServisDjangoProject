@@ -27,14 +27,14 @@
                                 <a class="btn btn-primary"
                                    href="{% url 'emailservisapp:message_detail' message.pk %}"
                                    role="button">Перейти к сообщению</a>
-
+                                {% if user == message.owner %}
                                 <a class="btn btn-info"
                                    href="{% url 'emailservisapp:message_update' message.pk %}"
                                    role="button">Редактировать</a>
                                 <a class="btn btn-danger"
                                    href="{% url 'emailservisapp:message_delete' message.pk %}"
                                    role="button">Удалить</a>
-
+                                {% endif %}
 
                             </div>
                         </div>

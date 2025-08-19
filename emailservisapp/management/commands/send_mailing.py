@@ -11,7 +11,7 @@ class Command(BaseCommand):
         now = timezone.now()
         try:
             mailings = Mailing.objects.filter(
-                first_time__lte=now, status_mailing__in=[Mailing.start, Mailing.run]
+                status_mailing__in=[Mailing.start, Mailing.run]
             )
             for mailing in mailings:
                 send_message(mailing.pk)
