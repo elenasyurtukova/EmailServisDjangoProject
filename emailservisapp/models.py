@@ -87,9 +87,6 @@ class Mailing(models.Model):
         blank=True,
         related_name="mailings",
     )
-    owner_is_active = models.BooleanField(
-        blank=True, null=True, verbose_name="Флаг активности владельца", default=True
-    )
 
     class Meta:
         verbose_name = "Рассылка"
@@ -97,7 +94,6 @@ class Mailing(models.Model):
         ordering = ["status_mailing", "message"]
         permissions = [
             ("can_end_mailing", "Can end mailing"),
-            ("can_block_user", "Can block user"),
         ]
 
     def __str__(self):

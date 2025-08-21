@@ -1,7 +1,8 @@
 from django.views.decorators.cache import cache_page
 
+from users.models import User
 from .models import Client, Message, Mailing, Attempt
-from .forms import ClientForm, MessageForm, MailingForm, AttemptForm, MailingManagerForm
+from .forms import ClientForm, MessageForm, MailingForm, AttemptForm, MailingManagerForm, UserManagerForm
 from datetime import datetime
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -40,7 +41,7 @@ class ClientListView(ListView):
     model = Client
 
     def get_queryset(self):
-        if self.request.user.has_perm("users.can_view_all"):
+        if self.request.user.has_perm("users.can_block_user"):
             return Client.objects.all()
         return Client.objects.filter(owner=self.request.user)
 
@@ -113,7 +114,7 @@ class MailingListView(ListView):
     model = Mailing
 
     def get_queryset(self):
-        if self.request.user.has_perm("users.can_view_all"):
+        if self.request.user.has_perm("users.can_block_user"):
             return Mailing.objects.all()
         return Mailing.objects.filter(owner=self.request.user)
 
@@ -228,3 +229,24 @@ class AttemptUpdateView(UpdateView):
 class AttemptDeleteView(DeleteView):
     model = Attempt
     success_url = reverse_lazy("emailservisapp:attempts_list")
+
+
+class UserListView(ListView):
+    model = User
+    template_name = "emailservisapp/users_list.html"
+    context_object_name = "users"
+
+    def get_queryset(self):
+        if self.request.user.has_perm("users.can_block_user"):
+            return User.objects.exclude(is_superuser = True)
+
+class UserUpdateView(UpdateView):
+    model = User
+    form_class = UserManagerForm
+    success_url = reverse_lazy("emailservisapp:users_list")
+
+
+class UserBlockView(UpdateView):
+    model = User
+    form_class = UserManagerForm
+    success_url = reverse_lazy("emailservisapp:users_list")
